@@ -9,7 +9,8 @@ CREATE VIEW dbo.vw_TeamSummary
 AS
 WITH TeamGames AS (
     SELECT
-        g.GameID, g.GameDateTime,
+        g.GameID, 
+        g.GameDateTime,
         tHome.TeamID AS HomeTeamID,
         tAway.TeamID AS AwayTeamID,
         tHome.Stadium AS HomeStadium,
@@ -26,9 +27,13 @@ WITH TeamGames AS (
     JOIN dbo.Teams tAway ON tAway.TeamID = g.AwayTeamID
     UNION ALL
     SELECT
-        g.GameID, g.GameDateTime,
-        tHome.TeamID, tAway.TeamID, tHome.Stadium,
-        tAway.TeamID, tHome.TeamID,
+        g.GameID, 
+        g.GameDateTime,
+        tHome.TeamID, 
+        tAway.TeamID, 
+        tHome.Stadium,
+        tAway.TeamID, 
+        tHome.TeamID,
         CAST(0 AS bit),
         g.AwayScore, g.HomeScore,
         CASE WHEN g.AwayScore > g.HomeScore THEN 1 ELSE 0 END,

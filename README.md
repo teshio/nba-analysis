@@ -9,7 +9,12 @@ React front end talks to a minimal ASP.NET Core API that reads from `dbo.vw_Team
 - Execute `sql/Create_vw_TeamSummary.sql`
 - Execute `sql/Create_sp_GetTeamSummary.sql`
 
-### 2) API
+### 2) Config
+-- Open /api/src/appsettings.json
+-- Check and update ConnectionString.DefaultConnection
+-- Update OpenAI.ApiKey with an OpenAI api key
+
+### 3) API
 ```bash
 cd api/src
 dotnet restore
@@ -17,7 +22,7 @@ dotnet run
 ```
 Default ports: `https://localhost:7088` / `http://localhost:5088`. Configure `appsettings.json`.
 
-### 3) Frontend
+### 4) Frontend
 ```bash
 cd frontend
 npm i
