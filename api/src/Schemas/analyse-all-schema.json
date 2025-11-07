@@ -1,0 +1,47 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "NBA Analysis Schema",
+  "type": "object",
+  "properties": {
+    "topTeams": {
+      "type": "array",
+      "description": "Top 5 teams ranked by win percentage.",
+      "items": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "The name of the NBA team."
+          },
+          "winPct": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 1,
+            "description": "Team's win percentage expressed as a decimal (0–1)."
+          }
+        },
+        "required": [ "name", "winPct" ],
+        "additionalProperties": false
+      },
+      "minItems": 1
+    },
+    "anomalies": {
+      "type": "array",
+      "description": "Notable statistical anomalies or outliers in team performance.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    },
+    "insights": {
+      "type": "array",
+      "description": "General league-wide insights derived from the data.",
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [ "topTeams", "anomalies", "insights" ],
+  "additionalProperties": false
+}

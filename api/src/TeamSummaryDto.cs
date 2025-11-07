@@ -1,0 +1,15 @@
+public record TeamSummaryDto(
+    string? TeamName,
+    string? TeamStadiumName,
+    string? TeamLogo,
+    string? TeamUrl,
+    string? SeasonMVPOnTeam,
+    int? NumberOfGamesPlayed,
+    int? NumberOfGamesWon,
+    int? NumberOfGamesLost,
+    int? NumberOfGamesPlayedAtHome,
+    int? NumberOfGamesPlayedAway,
+    string? PointsInBiggestWin,
+    string? PointsInBiggestLoss,
+    string? LastGameStadiumName,
+    DateTime? LastGameDate);
