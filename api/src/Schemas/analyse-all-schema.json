@@ -17,7 +17,7 @@
             "type": "number",
             "minimum": 0,
             "maximum": 1,
-            "description": "Team's win percentage expressed as a decimal (0–1)."
+            "description": "Team's win percentage expressed as a decimal (0ï¿½1)."
           }
         },
         "required": [ "name", "winPct" ],

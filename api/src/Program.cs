@@ -39,7 +39,7 @@ app.MapGet("/", () => Results.Redirect("/swagger"));
 
 app.MapGet("/api/teams/summary", async (IDataRepository db) =>
 {
-    Results.Ok(await db.GetTeamSummariesAsync());
+    return Results.Ok(await db.GetTeamSummariesAsync());
 });
 
 app.MapPost("/api/ai/analyse", async (IDataAnalyser analyser, TeamAnalyseRequest req) =>
