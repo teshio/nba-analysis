@@ -194,7 +194,7 @@ Return strict JSON with:
             return new NbaPredictionResult
             {
                 PredictionSummary = $"{homeName} vs {awayName}: Predicted Score {predictedHome:F0} - {predictedAway:F0}, " +
-                $"Prediction Probabilities HomeScore: {(homeMetrics.RSquared*100):F2}%, AwayScore: {(AwayMetrics.RSquared*100):F2}%"
+                $"Model Fit (R²): Home={homeMetrics.RSquared:F2}, Away={AwayMetrics.RSquared:F2}  -- positive  -> good prediction, negative -> poor prediction"
             };
         }
     }
