@@ -9,9 +9,7 @@ namespace Nba.Api.DataAccess
         public async Task<IEnumerable<TeamSummaryDto>> GetTeamSummariesAsync() => 
             await connection.QueryAsync<TeamSummaryDto>("sp_GetTeamSummary");
 
-        public Task<TeamSummaryDto?> GetTeamSummaryByNameAsync(string teamName)
-        {
-            throw new NotImplementedException();
-        }
+        public async Task<IEnumerable<GameData>> GetAllGameDataAsync() =>
+            await connection.QueryAsync<GameData>("sp_GetAllGames");
     }
 }

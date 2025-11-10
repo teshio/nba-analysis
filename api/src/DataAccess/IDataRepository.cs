@@ -1,6 +1,8 @@
+using Nba.Api.DataAccess;
+
 public interface IDataRepository
 {
     Task<IEnumerable<TeamSummaryDto>> GetTeamSummariesAsync();
 
-    Task<TeamSummaryDto?> GetTeamSummaryByNameAsync(string teamName);
+    Task<IEnumerable<GameData>> GetAllGameDataAsync();
 }

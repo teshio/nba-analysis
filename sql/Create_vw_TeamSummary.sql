@@ -106,6 +106,7 @@ LastGame AS (
     WHERE x.rn = 1
 )
 SELECT
+    t.TeamID,
     t.Name AS TeamName,
     t.Stadium AS TeamStadiumName,
     t.Logo AS TeamLogo,

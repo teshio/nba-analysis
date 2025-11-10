@@ -1,4 +1,5 @@
 public record TeamSummaryDto(
+    int TeamId,
     string? TeamName,
     string? TeamStadiumName,
     string? TeamLogo,

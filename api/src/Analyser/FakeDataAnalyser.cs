@@ -48,5 +48,10 @@ namespace Nba.Api.Analyser
             var result = JsonSerializer.Deserialize<NbaAnalysis>(fake);
             return Task.FromResult(result);
         }
+
+        public Task<NbaPredictionResult> PredictNextOutcome(int homeId, int awayId)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

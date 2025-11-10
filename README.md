@@ -39,3 +39,10 @@ The Vite server proxies `/api/*` to your backend automatically.
 - Override: `VITE_PROXY_TARGET=http://localhost:5088 npm run dev`
 
 With the proxy enabled, you can remove `.env.local` (no `VITE_API_BASE` required).
+
+
+## Future Enhancements
+
+- API Authorisation
+- Load limiting (checking IP address/rate limiting)
+- Introduce multiple thread for the ML.NET section

@@ -65,4 +65,19 @@ app.MapGet("/api/analyse-all", async (IDataAnalyser analyser) =>
     return Results.Ok(new { analysis = result });
 });
 
+app.MapPost("/api/predict-next", async (IDataRepository dataRepository, IDataAnalyser analyser, string homeTeam, string awayTeam) =>
+{
+    var summary = await dataRepository.GetTeamSummariesAsync();
+    var homeTeamId = summary.FirstOrDefault(x => x.TeamName == homeTeam)?.TeamId;
+    var awayTeamId = summary.FirstOrDefault(x => x.TeamName == awayTeam)?.TeamId;
+
+    if(homeTeamId == null || awayTeam == null)
+    {
+        return Results.InternalServerError("Invalid home team or away team");
+    }
+
+    var result = await analyser.PredictNextOutcome(homeTeamId.Value, awayTeamId.Value);
+    return Results.Ok(result);
+});
+
 app.Run();

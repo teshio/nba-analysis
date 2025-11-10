@@ -1,4 +1,5 @@
 export type TeamSummary = {
+    teamId: number;
     teamName: string | null;
     teamStadiumName: string | null;
     teamLogo: string | null;
@@ -15,16 +16,18 @@ export type TeamSummary = {
 };
 
 export type LeagueAnalysis = {
-  topTeams: { name: string; winPct: number }[];
-  anomalies: string[];
-  insights: string[];
+    topTeams: { name: string; winPct: number }[];
+    anomalies: string[];
+    insights: string[];
 };
 
 export type AnalyseAllResponse = {
-  analysis: string | LeagueAnalysis; // allow either
+    analysis: string | LeagueAnalysis; // allow either
 };
 
 export type AnalyseResponse = { analysis: string };
+
+export type PredictResponse = { predictionSummary: string };
 
 const API_BASE = (import.meta as any).env.VITE_API_BASE?.replace(/\/$/, '') || '';
 
@@ -61,6 +64,9 @@ export const api = {
         '/api/ai/analyse',
         {
             teamName
-        })
+        }),
+    predict: (teamHome: string, teamAway: string) => postJson<PredictResponse>(
+        '/api/predict-next?homeTeam=' + teamHome +  '&awayTeam=' + teamAway,
+        {        })
 };
 

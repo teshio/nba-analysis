@@ -14,6 +14,11 @@ export default function App() {
     const [allError, setAllError] = useState<string | null>(null);
     const [league, setLeague] = useState<LeagueAnalysis | null>(null);
 
+    // outcome prediction
+    const [predictionTeamIdHome, setPredictionTeamIdHome] = useState<string>('');
+    const [predictionTeamIdAway, setPredictionTeamIdAway] = useState<string>('');
+    const [predictionSummary, setPredictionSummary] = useState<string>('');
+    const [predictLoading, setPredictLoading] = useState(false);
 
     useEffect(() => {
         let m = true;
@@ -27,13 +32,57 @@ export default function App() {
         return () => { m = false }
     }, []);
 
+    const handlePredict = async () => {
+        //predictionTeamIdHome , predictionTeamIdAway - pass to api
+        try {
+            setPredictLoading(true)
+            const res = await api.predict(predictionTeamIdHome, predictionTeamIdAway);
+            console.log(res)
+            setPredictionSummary(res.predictionSummary);
+        } finally { 
+            setPredictLoading(false)
+        }
+    }
+
+    const handleSelectTeam = async (checked: boolean, teamName: string) => {
+
+        if (checked) {
+
+            if (predictionTeamIdHome == '') {
+                setPredictionTeamIdHome(teamName);
+                console.log('Home TEAMID == ' + teamName);
+
+            } else if (predictionTeamIdAway == '') {
+                setPredictionTeamIdAway(teamName);
+                console.log('Away TEAMID == ' + teamName);
+            }
+        }
+        else {
+
+            if (predictionTeamIdAway == '') {
+                setPredictionTeamIdHome('');
+                console.log('Clear Home');
+
+            } else {
+                setPredictionTeamIdAway('');
+                console.log('Clear Away');
+            }
+        }
+    }
+
     const handleAnalyse = async (name: string | null) => {
         if (!name) return;
         setLoading(s => ({ ...s, [name]: true }));
         try {
             const res = await api.analyse(name);
             setAnalysis(s => ({ ...s, [name]: res.analysis }))
-        } catch (e: any) { setAnalysis(s => ({ ...s, [name]: String(e?.message || e) })) } finally { setLoading(s => ({ ...s, [name]: false })) }
+        }
+        catch (e: any) {
+            setAnalysis(s => ({ ...s, [name]: String(e?.message || e) }))
+        }
+        finally {
+            setLoading(s => ({ ...s, [name]: false }))
+        }
     };
 
     const handleAnalyseAll = async () => {
@@ -70,7 +119,7 @@ export default function App() {
 
     const count = useMemo(() => rows?.length ?? 0, [rows]);
 
-    return (<div className='p-8 max-w-[1200px] mx-auto'>
+    return (<div className='p-8 max-w-[1400px] mx-auto'>
         <h1 className='text-2xl font-semibold mb-2'>NBA Teams Summary</h1>
         <div className='text-sm opacity-70 mb-4'><div>Rows loaded: {count}</div>
             {(import.meta as any).env.VITE_API_BASE && <div>API: {(import.meta as any).env.VITE_API_BASE}</div>}</div>
@@ -79,6 +128,7 @@ export default function App() {
             <div className='overflow-x-auto rounded-2xl shadow'>
                 <table className='min-w-full text-sm'>
                     <thead className='bg-gray-100'><tr>
+                        <th></th>
                         <th className='p-3 text-left '>Team</th>
                         <th className='p-3'>Stadium</th>
                         <th className='p-3'>MVP</th>
@@ -94,10 +144,17 @@ export default function App() {
                         <th className='p-3'>AI</th></tr>
                     </thead>
                     <tbody>{rows.map((r, i) => {
-                        const key = `${r.teamName ?? ''}|${r.teamStadiumName ?? ''}|${i}`;
+                        const key = `${r.teamId ?? ''}|${r.teamStadiumName ?? ''}|${i}`;
                         return (
                             <>
                                 <tr key={key} className='odd:bg-white even:bg-gray-50 align-top'>
+                                    <td className='p-3 text-center items-center' >
+                                        
+                                        <input type="checkbox" 
+                                        onClick={(e : any) => handleSelectTeam(e.target.checked, r.teamName)}
+                                        disabled={predictionTeamIdHome != '' && predictionTeamIdAway != '' && r.teamName != predictionTeamIdHome && r.teamName != predictionTeamIdAway  }
+                                        ></input>
+                                    </td>
                                     <td className='p-3'>
                                         <div className='flex items-center gap-2'>{r.teamLogo ? <img src={r.teamLogo} alt={r.teamLogo} className='h-9 w-10 rounded' /> : null}
                                         </div>
@@ -141,7 +198,20 @@ export default function App() {
                         {allLoading ? 'Analysing All…' : 'Analyse All (OpenAI)'}
                     </button>
                     {allError && <span className="text-sm text-red-600">{allError}</span>}
+
+                    <button className="px-3 py-1 rounded-2xl border hover:shadow disabled:opacity-60"
+                        disabled={(predictionTeamIdAway == '' && predictionTeamIdHome == '') || predictLoading}
+                        onClick={() => handlePredict()}
+                    >
+                        {predictLoading ? "Predicting..." : "Predict"} {predictionTeamIdHome == '' ? "[select a team]" : predictionTeamIdHome} v {predictionTeamIdAway == '' ? "[select a team]" : predictionTeamIdAway}
+                    </button>
                 </div>
+
+                {predictionSummary && <div>
+                    <div className="rounded-xl border bg-gray-50 p-4 m-5">
+                        <h2 className="font-bold mb-3 text">Prediction</h2>
+                        {predictionSummary}
+                    </div></div>}
 
                 {league && (
                     <div className="rounded-xl border bg-gray-50 p-4 m-5">

@@ -1,8 +1,12 @@
-﻿using OpenAI.Chat;
+﻿using Microsoft.Data.SqlClient;
+using Microsoft.ML;
+using Nba.Api.DataAccess;
+using OpenAI.Chat;
 using System.Data;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Xml;
 
 namespace Nba.Api.Analyser
 {
@@ -23,6 +27,8 @@ namespace Nba.Api.Analyser
             _client = new("gpt-4o", key);
             _dataRepository = dataRepository;
         }
+
+
 
         public async Task<NbaSingleTeamAnalsysis?> AnalyseSingleTeamData(string teamName)
         {
@@ -138,6 +144,58 @@ Return strict JSON with:
                 Console.WriteLine($"An error occurred during the API call: {ex.Message}");
                 throw;
             }
+        }
+
+        public async Task<NbaPredictionResult> PredictNextOutcome(int homeId, int awayId)
+        {
+            var allGames = await _dataRepository.GetAllGameDataAsync();
+
+            var mlContext = new MLContext();
+
+            // Load the data into ML.NET
+            var dataView = mlContext.Data.LoadFromEnumerable(allGames);
+            var split = mlContext.Data.TrainTestSplit(dataView, testFraction: 0.2);
+
+            // Define pipelines for HomeScore and AwayScore
+            var pipelineHome = mlContext.Transforms
+                .Concatenate("Features", "HomeTeamID", "AwayTeamID")
+                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "HomeScore"));
+
+            var pipelineAway = mlContext.Transforms
+                .Concatenate("Features", "HomeTeamID", "AwayTeamID")
+                .Append(mlContext.Regression.Trainers.Sdca(labelColumnName: "AwayScore"));
+
+            // Train both models
+            var modelHome = pipelineHome.Fit(split.TrainSet);
+            var modelAway = pipelineAway.Fit(split.TrainSet);
+
+            var homeName = allGames.FirstOrDefault(x => x.HomeTeamID == homeId)?.HomeTeamName ?? "Home Team";
+            var awayName = allGames.FirstOrDefault(x => x.AwayTeamID == awayId)?.AwayTeamName ?? "Away Team";
+
+            // Predict scores
+            var predictorHome = mlContext.Model.CreatePredictionEngine<GameData, ScorePrediction>(modelHome);
+            var predictorAway = mlContext.Model.CreatePredictionEngine<GameData, ScorePrediction>(modelAway);
+
+            var nextGame = new GameData { 
+                HomeTeamID = homeId, 
+                AwayTeamID = awayId 
+            };
+
+            float predictedHome = predictorHome.Predict(nextGame).PredictedScore;
+            float predictedAway = predictorAway.Predict(nextGame).PredictedScore;
+
+            // Display model accuracy
+            var homeMetrics = mlContext.Regression
+                .Evaluate(modelHome.Transform(split.TestSet), labelColumnName: "HomeScore");
+
+            var AwayMetrics = mlContext.Regression
+                .Evaluate(modelAway.Transform(split.TestSet), labelColumnName: "AwayScore");
+
+            return new NbaPredictionResult
+            {
+                PredictionSummary = $"{homeName} vs {awayName}: Predicted Score {predictedHome:F0} - {predictedAway:F0}, " +
+                $"Prediction Probabilities HomeScore: {(homeMetrics.RSquared*100):F2}%, AwayScore: {(AwayMetrics.RSquared*100):F2}%"
+            };
         }
     }
 }
