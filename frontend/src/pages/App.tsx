@@ -151,14 +151,14 @@ export default function App() {
                                     <td className='p-3 text-center items-center' >
                                         
                                         <input type="checkbox" 
-                                        onClick={(e : any) => handleSelectTeam(e.target.checked, r.teamName)}
+                                        onClick={(e : any) => handleSelectTeam(e.target.checked, r.teamName ?? '')}
                                         disabled={predictionTeamIdHome != '' && predictionTeamIdAway != '' && r.teamName != predictionTeamIdHome && r.teamName != predictionTeamIdAway  }
                                         ></input>
                                     </td>
                                     <td className='p-3'>
                                         <div className='flex items-center gap-2'>{r.teamLogo ? <img src={r.teamLogo} alt={r.teamLogo} className='h-9 w-10 rounded' /> : null}
                                         </div>
-                                        <a target="_blank" href={r.teamUrl} class="text-blue-600 hover:text-blue-800 underline decoration-dotted whitespace-nowrap pr-2">
+                                        <a target="_blank" href={r.teamUrl ?? ''} className="text-blue-600 hover:text-blue-800 underline decoration-dotted whitespace-nowrap pr-2">
                                             {r.teamName} ↗
                                         </a>
                                     </td>
@@ -182,7 +182,7 @@ export default function App() {
                                 </tr>
                                 {analysis[r.teamName ?? ''] &&
                                     <tr>
-                                        <td colspan='13'>
+                                        <td colSpan={13}>
                                             <div className='m-3 text-xs'>{analysis[r.teamName ?? '']}</div>
                                         </td>
                                     </tr>}

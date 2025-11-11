@@ -2,6 +2,7 @@ export type TeamSummary = {
     teamId: number;
     teamName: string | null;
     teamStadiumName: string | null;
+    teamUrl: string | null;
     teamLogo: string | null;
     seasonMVPOnTeam: string | null;
     numberOfGamesPlayed: number | null;
