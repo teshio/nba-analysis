@@ -2,6 +2,8 @@
 
 React front end talks to a minimal ASP.NET Core API that reads from `dbo.vw_TeamSummary`.
 
+<img width="2500" height="2076" alt="preview" src="https://github.com/user-attachments/assets/2200b70d-ce2f-49d2-a01a-edf4c0c8b720" />
+
 ## Quick start
 
 ### 1) Database
