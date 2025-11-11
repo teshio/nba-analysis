@@ -1,6 +1,11 @@
-# NBA Teams Summary — React (Vite + TS) + .NET 9 Minimal API + SQL View + Tailwind
+# NBA Teams Summary with AI Analysis — React (Vite + Tyepscript) + .NET 9 Minimal API + SQL Views/Procs + TailwindCSS
 
-React front end talks to a minimal ASP.NET Core API that reads from `dbo.vw_TeamSummary`.
+React front-end talks to a minimal ASP.NET Core API that reads from `dbo.vw_TeamSummary`. Provides several different analysis function against the data:
+* Per team analysis (via OpenAI)
+* Entire league analysis (via OpenAI)
+* Score prediction (via ML.NET)
+
+<img width="2500" height="2076" alt="preview" src="https://github.com/user-attachments/assets/2200b70d-ce2f-49d2-a01a-edf4c0c8b720" />
 
 ## Quick start
 
@@ -8,13 +13,14 @@ React front end talks to a minimal ASP.NET Core API that reads from `dbo.vw_Team
 - Run the seed to create/populate `NBA`
 - Execute `sql/Create_vw_TeamSummary.sql`
 - Execute `sql/Create_sp_GetTeamSummary.sql`
+- Execute `sql/Create_sp_GetAllGames.sql`
 
 ### 2) Config
--- Open /api/src/appsettings.json
--- Check and update ConnectionString.DefaultConnection
--- Update OpenAI.ApiKey with an OpenAI api key
+-- Open `/api/src/appsettings.json`
+-- Check and update `ConnectionString.DefaultConnection` with a connection string to the NBA data that was previously seeded
+-- Update `OpenAI.ApiKey` with an OpenAI api key
 
-### 3) API
+### 3) Run API
 ```bash
 cd api/src
 dotnet restore
@@ -22,7 +28,7 @@ dotnet run
 ```
 Default ports: `https://localhost:7088` / `http://localhost:5088`. Configure `appsettings.json`.
 
-### 4) Frontend
+### 4) Run Frontend
 ```bash
 cd frontend
 npm i
@@ -45,4 +51,5 @@ With the proxy enabled, you can remove `.env.local` (no `VITE_API_BASE` required
 
 - API Authorisation
 - Load limiting (checking IP address/rate limiting)
-- Introduce multiple thread for the ML.NET section
+- Introduce multiple threads for the ML.NET section to improve performance
+- Improve the prediction model by passing more stats regarding a team so a stronger prediction can be made
