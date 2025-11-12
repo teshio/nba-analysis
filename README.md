@@ -1,5 +1,7 @@
 # NBA Teams Summary with AI Analysis — React (Vite + Tyepscript) + .NET 9 Minimal API + SQL Views/Procs + TailwindCSS
 
+[Check it out!](https://agreeable-glacier-076d9fb03.3.azurestaticapps.net)
+
 React front-end talks to a minimal ASP.NET Core API that reads from `dbo.vw_TeamSummary`. Provides several different analysis function against the data:
 * Per team analysis (via OpenAI)
 * Entire league analysis (via OpenAI)
