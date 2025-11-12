@@ -20,7 +20,7 @@ export default function App() {
     const [predictionSummary, setPredictionSummary] = useState<string>('');
     const [predictLoading, setPredictLoading] = useState(false);
 
-    console.log("API base:", import.meta.env.VITE_API_BASE_URL);
+    console.log("API base:", import.meta.env.VITE_API_BASE);
 
     useEffect(() => {
         let m = true;
