@@ -38,6 +38,10 @@ Open http://localhost:5173
 
 Endpoints: `/api/teams/summary`, `/api/ai/analyse`, `/api/diag/db-counts`.
 
+## Environment
+
+Hosted on Azure [here](https://agreeable-glacier-076d9fb03.3.azurestaticapps.net)
+
 
 ## Dev proxy (no env needed)
 The Vite server proxies `/api/*` to your backend automatically.
