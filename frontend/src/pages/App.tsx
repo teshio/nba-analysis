@@ -41,7 +41,7 @@ export default function App() {
             const res = await api.predict(predictionTeamIdHome, predictionTeamIdAway);
             console.log(res)
             setPredictionSummary(res.predictionSummary);
-        } finally { 
+        } finally {
             setPredictLoading(false)
         }
     }
@@ -124,7 +124,8 @@ export default function App() {
     return (<div className='p-8 max-w-[1400px] mx-auto'>
         <h1 className='text-2xl font-semibold mb-2'>NBA Teams Summary</h1>
         <div className='text-sm opacity-70 mb-4'><div>Rows loaded: {count}</div>
-            {(import.meta as any).env.VITE_API_BASE && <div>API: {(import.meta as any).env.VITE_API_BASE}</div>}</div>
+            {(import.meta as any).env.VITE_API_BASE && <div className='invisible'>API: {(import.meta as any).env.VITE_API_BASE}</div>}
+        </div>
         {error && <div className='p-3 rounded bg-red-100 text-red-800 mb-4'>{error}</div>}
         {!rows ? (<div>Loading…</div>) : (
             <div className='overflow-x-auto rounded-2xl shadow'>
@@ -151,10 +152,10 @@ export default function App() {
                             <>
                                 <tr key={key} className='odd:bg-white even:bg-gray-50 align-top'>
                                     <td className='p-3 text-center items-center' >
-                                        
-                                        <input type="checkbox" 
-                                        onClick={(e : any) => handleSelectTeam(e.target.checked, r.teamName ?? '')}
-                                        disabled={predictionTeamIdHome != '' && predictionTeamIdAway != '' && r.teamName != predictionTeamIdHome && r.teamName != predictionTeamIdAway  }
+
+                                        <input type="checkbox"
+                                            onClick={(e: any) => handleSelectTeam(e.target.checked, r.teamName ?? '')}
+                                            disabled={predictionTeamIdHome != '' && predictionTeamIdAway != '' && r.teamName != predictionTeamIdHome && r.teamName != predictionTeamIdAway}
                                         ></input>
                                     </td>
                                     <td className='p-3'>
