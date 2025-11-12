@@ -47,7 +47,7 @@ app.MapPost("/api/ai/analyse", async (IDataAnalyser analyser, TeamAnalyseRequest
     var result = await analyser.AnalyseSingleTeamData(req.TeamName);
     if (result == null)
     {
-        return Results.InternalServerError();
+        return Results.InternalServerError($"No result for {req.TeamName}");
     }
 
     return Results.Ok(new AnalyseResponse(result.Summary));
