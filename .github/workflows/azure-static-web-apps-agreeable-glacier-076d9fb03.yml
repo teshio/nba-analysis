@@ -19,6 +19,10 @@ jobs:
         with:
           submodules: true
           lfs: false
+
+      - name: Print Vite env vars
+        run: printenv | grep VITE_ || true
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1
