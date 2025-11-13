@@ -54,6 +54,8 @@ With the proxy enabled, you can remove `.env.local` (no `VITE_API_BASE` required
 
 ## Architecture
 
+<img width="1024" height="1024" alt="architecture overview" src="https://github.com/user-attachments/assets/0429801b-ca2f-46ec-92f1-2f569f1ca039" />
+
 Key design choices:
 
 - Separation of concerns → UI, API, and analytics isolated
