@@ -52,10 +52,33 @@ The Vite server proxies `/api/*` to your backend automatically.
 
 With the proxy enabled, you can remove `.env.local` (no `VITE_API_BASE` required).
 
+## Architecture
+
+Key design choices:
+
+- Separation of concerns → UI, API, and analytics isolated
+- Interface abstraction → analyser can be replaced or extended
+- Predictable API contracts
+- Simple, readable code paths
+
 
 ## Future Enhancements
 
-- API Authorisation
-- Load limiting (checking IP address/rate limiting)
+- Add API Authorisation
+- Load limiting (checking IP address/rate limiting to prevent DoS)
 - Introduce multiple threads for the ML.NET section to improve performance
-- Improve the prediction model by passing more stats regarding a team so a stronger prediction can be made
+- Improve the prediction model by passing more stats regarding a team so a stronger prediction can be made (currently with the games, only able to get R2 values of -2, which indicates a poor model)
+- Add logging via the ILogging standard interface so we can plugin a suitable logger
+
+
+### Bigger Enhancements
+#### Automated Data Refresh
+Build a scheduled webjob which runs periodically to refresh the data and load more up to data game data
+
+#### Modularise Code
+Refactor functions into more seperate interfaces and classes. I.e. Could have different models for next game score predictions created by different classes via the same INBAPredcitor interface
+
+#### Introduce unit testing 
+Add unit tests for the prediction pipelines with mocked data to ensure suitable predictions are made
+
+#### Inroduy
