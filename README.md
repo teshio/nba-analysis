@@ -81,4 +81,3 @@ Refactor functions into more seperate interfaces and classes. I.e. Could have di
 #### Introduce unit testing 
 Add unit tests for the prediction pipelines with mocked data to ensure suitable predictions are made
 
-#### Inroduy
